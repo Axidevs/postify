@@ -3,6 +3,7 @@ const app = express()
 const cookieParser = require('cookie-parser')
 const path = require('path')
 const userModel = require('./models/user')
+const postModel = require('./models/post')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
@@ -16,6 +17,9 @@ app.use(cookieParser())
 
 app.get('/',(req,res)=>{
   res.render('index')
+})
+app.get('/profile',isLoggedIn ,(req,res)=>{
+
 })
 
 app.get('/login',(req,res)=>{
@@ -44,10 +48,34 @@ app.post('/register',async(req,res)=>{
 app.post('/login',async(req,res)=>{
   let {email,password} = req.body;
   let user = await userModel.findOne({email});
-  if(!user) return res.status(500).send("Something went wrong");
+  if(!user) return res.status(500).send("Something went wrong")
+    bcrypt.compare(password , user.password ,function (err , result){
+  if(result) {
+    let token = jwt.sign({email :email , userid: user._id},"shhh")
+     res.cookie("token" , token);
+
+     res.status(200).send("you can login")
+
+  }
+    else res.redirect('/login')
+  })
   
 })
 
+app.get('/logout',(req,res)=>{
+ res.cookie("token" ,"");
+ res.redirect('/login')
+})
+
+ function isLoggedIn(req,res ,next) {
+if(req.cookies.token ==="") res.send("You must be logged in")
+  else{
+ let data = jwt.verify(req.cookies.token ,"shhh")
+ req.user= data
+next()
+  }
+  
+ } 
 
 app.listen(3000 ,()=>{
   console.log("it is running")

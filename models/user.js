@@ -6,7 +6,10 @@ let userSchema = mongoose.Schema({
   age:Number,
   name:String,
   email:String,
-  password:String
+  password:String,
+  posts:[{
+    type:mongoose.Schema.ObjectId , ref:"post"
+  }],
 
 })
 

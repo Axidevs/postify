@@ -18,8 +18,27 @@ app.use(cookieParser())
 app.get('/',(req,res)=>{
   res.render('index')
 })
-app.get('/profile',isLoggedIn ,(req,res)=>{
 
+app.post('/post',isLoggedIn , async(req,res)=>{
+  let user = await userModel.findOne({email :req.user.email})
+  let{content}= req.body
+  let post = await postModel.create({
+    
+    userid:user._id,
+    content:content
+  })
+  user.posts.push(post._id);
+  await user.save()
+  res.redirect("/profile")
+
+})
+
+
+
+app.get('/profile',isLoggedIn ,async(req,res)=>{
+let user = await userModel.findOne({email:req.user.email})
+// console.log(user)
+res.render('profile',{user})
 })
 
 app.get('/login',(req,res)=>{
@@ -54,7 +73,7 @@ app.post('/login',async(req,res)=>{
     let token = jwt.sign({email :email , userid: user._id},"shhh")
      res.cookie("token" , token);
 
-     res.status(200).send("you can login")
+     res.status(200).redirect("/profile")
 
   }
     else res.redirect('/login')
@@ -68,7 +87,7 @@ app.get('/logout',(req,res)=>{
 })
 
  function isLoggedIn(req,res ,next) {
-if(req.cookies.token ==="") res.send("You must be logged in")
+if(req.cookies.token ==="") res.redirect('/login')
   else{
  let data = jwt.verify(req.cookies.token ,"shhh")
  req.user= data

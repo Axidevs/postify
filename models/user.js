@@ -10,6 +10,10 @@ let userSchema = mongoose.Schema({
   post:[{
     type:mongoose.Schema.ObjectId , ref:"post"
   }],
+  profilepic:{
+    type:String,
+    default:"default.png"
+  }
 
 })
 

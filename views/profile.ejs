@@ -14,8 +14,16 @@
 
     </div>
     <h2 class="text-3xl mb-6">Profile</h2>
-    <h3 class="text-3xl mb-5"><span>Hello ,</span><%= user.username %>👋 </h3>
-    <h5 class="mb-5">you can create a post</h5>
+    <div class="flex items-start gap-3">
+      <div class="w-10 h-10  overflow-hidden rounded-md">
+        <img class="w-full h-full object-cover" src="/images/uploads/<%= user.profilepic %>">
+
+      </div>
+      <h3 class="text-3xl mb-5"><span>Hello ,</span><%= user.username %>👋 </h3>
+
+    </div>
+    
+    <h5 class="mb-5 mt-3 ">you can create a post</h5>
     <form action="/post" method="post">
       <textarea placeholder="What's on your mind?" name="content" w-full block p-3 outline-none resize-none bg-transparent border-2 border-zinc-800 rounded-md"></textarea>
       <input class="px-3 w-40 py-2 bg-blue-500 block rounded-md mt-2" type="submit" value="Create new post">

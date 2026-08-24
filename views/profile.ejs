@@ -17,7 +17,7 @@
     <h3 class="text-3xl mb-5"><span>Hello ,</span><%= user.username %>👋 </h3>
     <h5 class="mb-5">you can create a post</h5>
     <form action="/post" method="post">
-      <textarea placeholder="What's on your mind?" name="content" w-1/3 block p-3 outline-none resize-none bg-transparent border-2 border-zinc-800 rounded-md"></textarea>
+      <textarea placeholder="What's on your mind?" name="content" w-full block p-3 outline-none resize-none bg-transparent border-2 border-zinc-800 rounded-md"></textarea>
       <input class="px-3 w-40 py-2 bg-blue-500 block rounded-md mt-2" type="submit" value="Create new post">
     </form>
     <div class="posts mt-20">
@@ -28,10 +28,11 @@
           <h4 class="text-blue-500 mb-2 "> <%= user.username %></h4>
 
           <p class="text-sm tracking-tight"><%= post.content%> </p>
+          <small class="mt-2 inline-block"><%= post.likes.length%> likes</small>
 
           <div class="btns flex gap-4 mt-5">
-            <a class="text-blue-500" href="">Like</a>
-             <a class="text-zinc-600" href="">Edit</a>
+            <a class="text-blue-500" href="/like/<%=post._id%>"><%= post.likes.indexOf(user._id)=== -1? "Like": "Unlike" %></a>
+             <a class="text-zinc-600" href="/edit/<%=post._id%>">Edit</a>
 
           </div>
         
